@@ -43,6 +43,7 @@ def get_board_size(game_id):
 
 # Solution found with size = 2 and size = 3
 # using pen and paper to find generic properities and patterns.
+# By induction.
 def draw_board(size):
     for r in range(0,(size*2) + 1):
         if r % 2 == 0:
