@@ -1,6 +1,11 @@
 # python-training
 
-My solutions to several python exercises found on the web
+My solutions to several Python exercises found on the web and on some books.
+
+## Warning
+
+These are my first serious steps with Python so there most certainly are 
+conceptual mistakes. 
 
 ## LICENSE
 

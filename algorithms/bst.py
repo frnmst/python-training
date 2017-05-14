@@ -53,6 +53,8 @@ class Bst:
     #   push in a node with a specified key as root
     def __init__(self,key):
         self.root = BstNode(key)
+        self.nodes = 1
+        self.id = self
 
     def __set_root(self,root):
         if root is None:
@@ -60,13 +62,19 @@ class Bst:
         else:
             return root
 
-    def delete():
-        pass
+    def _print(self):
+        print("Tree summary")
+        print("=========")
+        print("ID = " + str(self.id))
+        print("root = " + str(self.root))
+        print("Nodes = " + str(self.nodes))
+        print()
 
     def insert(self,key,root=None):
         x = self.__set_root(root)
         y = None
         z = BstNode(key)
+        # Find correct position for node z.
         while x is not None:
             y = x
             if z.key < x.key:
@@ -75,12 +83,19 @@ class Bst:
                 x = x.right
         z.parent = y
 
+        if y is not None and x is not None:
+            assert x.parent is y
+
+        # Was an empty tree.
         if y is None:
             self.root = z
+        # Parent vertex connects to son.
         elif z.key < y.key:
             y.left = z
         else:
             y.right = z
+
+        self.nodes += 1
 
     def search(self,key,root=None):
         x = self.__set_root(root)
@@ -141,9 +156,47 @@ class Bst:
             if x.left is not None:
                 s.push(x.left)
 
+    # Move v (and its descendants) in u's position
+    # This can also be used for trivial operations
+    def transplant(self,u,v,root=None):
+        assert u is not None
+        x = self.__set_root(root)
+
+        if u.parent is None:
+            self.root = v
+        elif u is u.parent.left:
+            u.parent.left = v
+        else: # u is u.parent.right
+            u.parent.right = v
+
+        if v is not None:
+            v.parent = u.parent
+
+    # Runs in O(h)
+    def delete(self,z):
+        if z.left is None:
+            self.transplant(z,z.right)
+        elif z.right is None:
+            self.transplant(z,z.left)
+        else:
+            assert z.right is not None and z.left is not None
+
+            # y = self.min(z.right) # which is the same as the successor.
+            y = self.successor(z)
+
+            if y.parent is not z:
+                self.transplant(y,y.right)
+                y.right = z.right
+                y.right.parent = y
+            self.transplant(z,y)
+            y.left = z.left
+            y.left.parent = y
+
+        self.nodes -= 1
+
 def test():
-    MIN = 2
-    MAX = 5
+    MIN = 1
+    MAX = 500
 
     t = None
 
@@ -166,8 +219,17 @@ def test():
         assert t.successor(t.min()).key == MIN + 1
         assert t.predecessor(t.max()).key == MAX - 1
 
-    t.preorder()
-    t.inorder()
+    # t.preorder()
+
+    t._print()
+
+    for v in test_values:
+        #print (v)
+        t.delete(t.search(v))
+
+    t._print()
+
+    assert t.nodes == 0 and t.root is None
 
 def test_static():
     t = Bst(1)
@@ -181,10 +243,14 @@ def test_static():
     t.preorder()
     # t.inorder()
 
+    t.transplant(t.search(0),t.search(8))
+    print("After transplant")
+    t.preorder()
+
 if __name__ == '__main__':
-    TESTS = 1
+    TESTS = 100
     for t in range(0,TESTS):
-        test_static()
-        #test()
+        # test_static()
+        test()
     print ("All tests passed")
 
