@@ -1,7 +1,16 @@
+## Source
+
+From the Cormen et alia book
+
 ## Files
 
-bst.py
+```
 stack.py
+|
+--bst.py
+  |
+  --bst_sort.py
+```
 
 ## License
 
@@ -14,6 +23,6 @@ neighboring rights to python-training/algorithms. This software is
 distributed without any warranty.
 
 You should have received a copy of the CC0 legalcode along with this
- software.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+software.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 

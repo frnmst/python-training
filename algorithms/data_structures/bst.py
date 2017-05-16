@@ -15,7 +15,7 @@
 # software.  If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 import random
-
+import math
 from stack import Stack
 
 class BstNode:
@@ -51,6 +51,10 @@ class BstNode:
 class Bst:
     # Start with an empty BST:
     #   push in a node with a specified key as root
+    # Attributes:
+    #   root:   pointer to the root node
+    #   nodes:  number of nodes currently in the tree
+    #   id:     pointer to object itself
     def __init__(self,key):
         self.root = BstNode(key)
         self.nodes = 1
@@ -80,6 +84,7 @@ class Bst:
             if z.key < x.key:
                 x = x.left
             else:
+                assert z.key >= x.key
                 x = x.right
         z.parent = y
 
@@ -156,6 +161,18 @@ class Bst:
             if x.left is not None:
                 s.push(x.left)
 
+    # An alternative inorder version that iterates over the tree the same way 
+    # the recirsive version does.
+    def inorder(self,root=None):
+        x = self.__set_root(root)
+        s = self.min(x)
+        s._print()
+        for i in range(1, self.nodes):
+            prev = s.key
+            s = self.successor(s)
+            # assert prev == s.key - 1
+            s._print()
+
     # Move v (and its descendants) in u's position
     # This can also be used for trivial operations
     def transplant(self,u,v,root=None):
@@ -194,9 +211,19 @@ class Bst:
 
         self.nodes -= 1
 
-def test():
-    MIN = 1
-    MAX = 500
+    # Use a slightly modified version of the inorder algorithm.
+    def is_bst(self,root=None):
+        x = self.__set_root(root)
+        s = self.min(x)
+        for i in range(1, self.nodes):
+            prev = s
+            s = self.successor(s)
+            if prev.key > s.key:
+                return False
+
+        return True
+
+def test(verbose=False):
 
     t = None
 
@@ -219,15 +246,20 @@ def test():
         assert t.successor(t.min()).key == MIN + 1
         assert t.predecessor(t.max()).key == MAX - 1
 
-    # t.preorder()
+    if verbose:
+        t.preorder()
+        t.inorder()
+        t._print()
 
-    t._print()
+    assert t.is_bst()
 
     for v in test_values:
-        #print (v)
+        if verbose:
+            print (v)
         t.delete(t.search(v))
 
-    t._print()
+    if verbose:
+        t._print()
 
     assert t.nodes == 0 and t.root is None
 
@@ -247,10 +279,21 @@ def test_static():
     print("After transplant")
     t.preorder()
 
+# Key range.
+MIN = 1
+MAX = 500
+
 if __name__ == '__main__':
+    # Since there are n keys which can be permutated, this leads to n! possible
+    # BSTs. We don't know how the PRNG pick the numbers but most certainly 
+    # there might be repetitions.
+    # TESTS = math.factorial(MAX-MIN+1)
     TESTS = 100
+    verbose = False
+
+    print ("Executing " + str(TESTS) + " tests on keys between " + str(MIN) + " and " + str(MAX) + ".")
     for t in range(0,TESTS):
         # test_static()
-        test()
+        test(verbose)
     print ("All tests passed")
 
