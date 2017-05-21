@@ -21,32 +21,26 @@ from bst import Bst, BstNode
 # From exercise 12-1
 
 class BstSameKeysNode(BstNode):
-    def __init__(self,key,right=None,left=None,parent=None):
+    def __init__(T,key,right=None,left=None,parent=None):
         super().__init__(key,right=None,left=None,parent=None)
-        self.b = False
+        T.b = False
 
-    def _print(self):
+    def _print(T):
         super()._print()
-        print("Boolean = " + str(self.b))
+        print("Boolean = " + str(T.b))
         print()
 
 class BstSameKeys(Bst):
-    def __init__(self,key):
-        self.root = BstSameKeysNode(key)
-        self.nodes = 1
-        self.id = self
-
-    def __set_root(self,root):
-        if root is None:
-            return self.root
-        else:
-            return root
+    def __init__(T,key):
+        T.root = BstSameKeysNode(key)
+        T.nodes = 1
+        T.id = T
 
     # Not sure about this one: putting x.b = ...
     # in the while loop leads to an is_bst() method
     # failure. So following is the possible right answer.
-    def insert_based_on_b(self,key,root=None):
-        x = self.__set_root(root)
+    def insert_based_on_b(T,key,root=None):
+        x = super()._set_root(root)
         y = None
         z = BstSameKeysNode(key)
 
@@ -66,7 +60,7 @@ class BstSameKeys(Bst):
 
         # Was an empty tree.
         if y is None:
-            self.root = z
+            T.root = z
         # Parent vertex connects to son.
         # Change the boolean of the parent only.
         else:
@@ -78,7 +72,7 @@ class BstSameKeys(Bst):
                 y.b = True
                 y.right = z
 
-        self.nodes += 1
+        T.nodes += 1
 
 
     #######
@@ -98,8 +92,8 @@ class BstSameKeys(Bst):
     #######
 
 
-    def insert_randomly(self,key,root=None):
-        x = self.__set_root(root)
+    def insert_randomly(T,key,root=None):
+        x = super()._set_root(root)
         y = None
         z = BstSameKeysNode(key)
         bool = random.choice([True, False])
@@ -120,7 +114,7 @@ class BstSameKeys(Bst):
 
         # Was an empty tree.
         if y is None:
-            self.root = z
+            T.root = z
         # Parent vertex connects to son.
         else:
             assert z.key == y.key
@@ -129,7 +123,7 @@ class BstSameKeys(Bst):
             else:
                 y.right = z
 
-        self.nodes += 1
+        T.nodes += 1
 
 def test_a(samples,key):
     t = None

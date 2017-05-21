@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# stack.py
+# queue.py
 #
 # python-training/algorithms (c) 2017 by Franco Masotti
 #                            <franco.masotti@student.unife.it>
@@ -16,34 +16,31 @@
 
 import random
 
-# Stack inhertis from the list class
-class Stack(list):
-    def push(S,key):
-        S.append(key)
+# Queue inhertis from the list class
+class Queue(list):
+    def enqueue(Q,key):
+        Q.append(key)
 
-    # super().method(arg)
-    # This does the same thing as:
-    # super(C, S).method(arg)
-    def pop(S):
-        return super().pop()
+    # Pop from the start of the list to emulate a queue
+    def dequeue(Q):
+        return super().pop(0)
 
 def test():
     MIN = 2
     MAX = 2000
 
     n = []
-    s = Stack()
+    q = Queue()
 
     assert MAX >= MIN
     test_values = random.sample(range(MIN,MAX + 1), k = MAX - MIN + 1)
 
     for v in test_values:
-        s.push(v)
+        q.enqueue(v)
 
-    while s:
-        n.append(s.pop())
+    while q:
+        n.append(q.dequeue())
 
-    n.reverse()
     assert n == test_values
 
 if __name__ == '__main__':

@@ -16,14 +16,11 @@
 
 import random
 
-from bst import Bst
+from bst import Bst, BstNode
 
 class BstSort(Bst):
-    def init(self,key):
-        super.__init__(key)
-
-    def insert(self,key,root=None):
-        x = self.__set_root(root)
+    def insert(T,key,root=None):
+        x = T.root
         y = None
         z = BstNode(key)
         # Find correct position for node z.
@@ -40,14 +37,14 @@ class BstSort(Bst):
 
         # Was an empty tree.
         if y is None:
-            self.root = z
+            T.root = z
         # Parent vertex connects to son.
         elif z.key < y.key:
             y.left = z
         else:
             y.right = z
 
-        self.nodes += 1
+        T.nodes += 1
 
 
 def test(verbose=False):
@@ -63,7 +60,7 @@ def test(verbose=False):
         if t is None:
             t = BstSort(v)
         else:
-            t.add(v)
+            t.insert(v)
 
 # Run n tests and check that the n lists returned are all equal to each other
 # knowing that they have been generated randomly, they have the same size

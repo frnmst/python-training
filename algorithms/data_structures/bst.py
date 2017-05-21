@@ -17,30 +17,31 @@
 import random
 import math
 from stack import Stack
+from queue import Queue
 
 class BstNode:
-    def __init__(self,key,right=None,left=None,parent=None):
-        self.key = key
-        self.right = right
-        self.left = left
-        self.parent = parent
-        self.id = self
+    def __init__(T,key,right=None,left=None,parent=None):
+        T.key = key
+        T.right = right
+        T.left = left
+        T.parent = parent
+        T.id = T
 
-    def _print(self):
+    def _print(T):
         print("Node data")
         print("=========")
-        print("ID = " + str(self.id))
-        print("Key = " + str(self.key))
-        print("Right = " + str(self.right))
-        print("Left = " + str(self.left))
-        print("Parent = " + str(self.parent))
+        print("ID = " + str(T.id))
+        print("Key = " + str(T.key))
+        print("Right = " + str(T.right))
+        print("Left = " + str(T.left))
+        print("Parent = " + str(T.parent))
         print()
 
-    def edit(self,key,right=None,left=None,parent=None):
-        self.key = key
-        self.right = right
-        self.left = left
-        self.parent = parent
+    def edit(T,key,right=None,left=None,parent=None):
+        T.key = key
+        T.right = right
+        T.left = left
+        T.parent = parent
 
 # Using iterative functions we avoid the mess.
 
@@ -54,28 +55,28 @@ class Bst:
     # Attributes:
     #   root:   pointer to the root node
     #   nodes:  number of nodes currently in the tree
-    #   id:     pointer to object itself
-    def __init__(self,key):
-        self.root = BstNode(key)
-        self.nodes = 1
-        self.id = self
+    #   id:     pointer to object itT
+    def __init__(T,key):
+        T.root = BstNode(key)
+        T.nodes = 1
+        T.id = T
 
-    def __set_root(self,root):
+    def _set_root(T,root):
         if root is None:
-            return self.root
+            return T.root
         else:
             return root
 
-    def _print(self):
+    def _print(T):
         print("Tree summary")
         print("=========")
-        print("ID = " + str(self.id))
-        print("root = " + str(self.root))
-        print("Nodes = " + str(self.nodes))
+        print("ID = " + str(T.id))
+        print("root = " + str(T.root))
+        print("Nodes = " + str(T.nodes))
         print()
 
-    def insert(self,key,root=None):
-        x = self.__set_root(root)
+    def insert(T,key,root=None):
+        x = T._set_root(root)
         y = None
         z = BstNode(key)
         # Find correct position for node z.
@@ -93,17 +94,17 @@ class Bst:
 
         # Was an empty tree.
         if y is None:
-            self.root = z
+            T.root = z
         # Parent vertex connects to son.
         elif z.key < y.key:
             y.left = z
         else:
             y.right = z
 
-        self.nodes += 1
+        T.nodes += 1
 
-    def search(self,key,root=None):
-        x = self.__set_root(root)
+    def search(T,key,root=None):
+        x = T._set_root(root)
         found = False
         while not found and x is not None:
             if key == x.key:
@@ -115,42 +116,42 @@ class Bst:
 
         return x
 
-    def min(self,root=None):
-        x = self.__set_root(root)
+    def min(T,root=None):
+        x = T._set_root(root)
         while x.left is not None:
             x = x.left
 
         return x
 
-    def max(self,root=None):
-        x = self.__set_root(root)
+    def max(T,root=None):
+        x = T._set_root(root)
         while x.right is not None:
             x = x.right
 
         return x
 
-    def successor(self,root=None):
-        x = self.__set_root(root)
+    def successor(T,root=None):
+        x = T._set_root(root)
         if x.right is not None:
-            return self.min(x.right)
+            return T.min(x.right)
         y = x.parent
         while y is not None and x is y.right:
             x = y
             y = y.parent
         return y
 
-    def predecessor(self,root=None):
-        x = self.__set_root(root)
+    def predecessor(T,root=None):
+        x = T._set_root(root)
         if x.left is not None:
-            return self.max(x.left)
+            return T.max(x.left)
         y = x.parent
         while y is not None and x is y.left:
             x = y
             y = y.parent
         return y
 
-    def preorder(self,root=None):
-        x = self.__set_root(root)
+    def preorder(T,root=None):
+        x = T._set_root(root)
         s = Stack()
         s.push(x)
         while s:
@@ -163,24 +164,24 @@ class Bst:
 
     # An alternative inorder version that iterates over the tree the same way 
     # the recirsive version does.
-    def inorder(self,root=None):
-        x = self.__set_root(root)
-        s = self.min(x)
+    def inorder(T,root=None):
+        x = T._set_root(root)
+        s = T.min(x)
         s._print()
-        for i in range(1, self.nodes):
+        for i in range(1, T.nodes):
             prev = s.key
-            s = self.successor(s)
+            s = T.successor(s)
             # assert prev == s.key - 1
             s._print()
 
     # Move v (and its descendants) in u's position
     # This can also be used for trivial operations
-    def transplant(self,u,v,root=None):
+    def transplant(T,u,v,root=None):
         assert u is not None
-        x = self.__set_root(root)
+        x = T._set_root(root)
 
         if u.parent is None:
-            self.root = v
+            T.root = v
         elif u is u.parent.left:
             u.parent.left = v
         else: # u is u.parent.right
@@ -190,38 +191,71 @@ class Bst:
             v.parent = u.parent
 
     # Runs in O(h)
-    def delete(self,z):
+    def delete(T,z):
         if z.left is None:
-            self.transplant(z,z.right)
+            T.transplant(z,z.right)
         elif z.right is None:
-            self.transplant(z,z.left)
+            T.transplant(z,z.left)
         else:
             assert z.right is not None and z.left is not None
 
-            # y = self.min(z.right) # which is the same as the successor.
-            y = self.successor(z)
+            # y = T.min(z.right) # which is the same as the successor.
+            y = T.successor(z)
 
             if y.parent is not z:
-                self.transplant(y,y.right)
+                T.transplant(y,y.right)
                 y.right = z.right
                 y.right.parent = y
-            self.transplant(z,y)
+            T.transplant(z,y)
             y.left = z.left
             y.left.parent = y
 
-        self.nodes -= 1
+        T.nodes -= 1
 
     # Use a slightly modified version of the inorder algorithm.
-    def is_bst(self,root=None):
-        x = self.__set_root(root)
-        s = self.min(x)
-        for i in range(1, self.nodes):
+    def is_bst(T,root=None):
+        x = T._set_root(root)
+        s = T.min(x)
+        for i in range(1, T.nodes):
             prev = s
-            s = self.successor(s)
+            s = T.successor(s)
             if prev.key > s.key:
                 return False
 
         return True
+
+    # Compute the normal height.
+    # See http://www.geeksforgeeks.org/iterative-method-to-find-height-of-binary-tree/
+    def h(T,root=None):
+        x = T._set_root(root)
+        q = Queue()
+        q.enqueue(x)
+        height = 0
+        found = False
+
+        # Safety first.
+        if x is None:
+            return 0
+
+        while not found:
+            nodes = len(q)
+
+            if nodes == 0:
+                found = True
+            else:
+                height += 1
+
+            while nodes > 0 and not found:
+                n = q.dequeue()
+                assert n is not None
+                if n.left is not None:
+                    q.enqueue(n.left)
+                if n.right is not None:
+                    q.enqueue(n.right)
+                nodes -= 1
+
+        return height
+
 
 def test(verbose=False):
 
@@ -253,9 +287,11 @@ def test(verbose=False):
 
     assert t.is_bst()
 
+    print(t.h())
+
     for v in test_values:
         if verbose:
-            print (v)
+            print(v)
         t.delete(t.search(v))
 
     if verbose:
@@ -279,6 +315,15 @@ def test_static():
     print("After transplant")
     t.preorder()
 
+# Check if height function computes correcly for the unbalanced case. Assume it
+# works for every case.
+def test_unbalanced():
+    t = Bst(MIN)
+    for k in range(MIN + 1, MAX + 1):
+        t.insert(k)
+
+    assert t.h() == MAX - MIN + 1
+
 # Key range.
 MIN = 1
 MAX = 500
@@ -293,7 +338,8 @@ if __name__ == '__main__':
 
     print ("Executing " + str(TESTS) + " tests on keys between " + str(MIN) + " and " + str(MAX) + ".")
     for t in range(0,TESTS):
-        # test_static()
+        test_unbalanced()
+        test_static()
         test(verbose)
     print ("All tests passed")
 
