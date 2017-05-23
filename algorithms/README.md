@@ -2,15 +2,14 @@
 
 From the Cormen et alia book
 
-## Files
+## Classes
 
-```
-stack.py
-|
---bst.py
-  |
-  --bst_sort.py
-```
+- Stack
+- Queue
+
+- Bst
+
+- Rbt
 
 ## License
 
