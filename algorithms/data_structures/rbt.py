@@ -26,19 +26,19 @@ red = "red"
 Null = object()
 
 class RbtNode(BstNode):
-    def __init__(T,key,color=black,right=None,left=None,parent=None):
+    def __init__(node,key,color=black,right=None,left=None,parent=None):
         super().__init__(key,right,left,parent=None)
-        T.color = color
+        node.color = color
 
-    def _print(T):
+    def _print(node):
         super()._print()
-        print("Color = " + str(T.color))
+        print("Color = " + str(node.color))
         print()
 
 # A Nil node is always black and we don't care about the value of the key 
 # (which has been chosen to be -1)
 class NilNode(RbtNode):
-    def __init__(T,right=None,left=None,parent=None):
+    def __init__(node,right=None,left=None,parent=None):
         super().__init__(-1,black,right,left,parent)
 
 class Rbt(Bst):
@@ -181,29 +181,89 @@ class Rbt(Bst):
                     T.rotate_left(z.parent.parent)
         T.root.color = black
 
-    def search(T,key,root=None):
-        x = T._set_root(root)
-        found = False
-        while not found and x is not T.sentinel:
-            if key == x.key:
-                found = True
-            elif key < x.key:
-                x = x.left
+    def transplant(T,u,v):
+        assert u is not None
+
+        if u.parent is T.sentinel:
+            T.root = v
+        elif u is u.parent.left:
+            u.parent.left = v
+        else:
+            assert u is u.parent.right
+            u.parent.right = v
+        # u.parent might be T.sentinel here. This is not a problem unlike
+        # in the traditional BST with Nil values instead of the sentinel.
+        v.parent = u.parent
+
+    def delete(T,key):
+        z = T.search(key)
+        y = z
+        y_original_color = y.color
+        if z.left is T.sentinel:
+            x = z.right
+            T.transplant(z,z.right)
+        elif z.right is T.sentinel:
+            x = z.left
+            T.Transplant(z,z.left)
+        else:
+            assert type(z.right) is RbtNode and type(z.left) is RbtNode
+            y = T.min(z.right)
+            y_original_color = y.color
+            x = y.right
+            if y.parent is z:
+                x.parent = y
             else:
-                x = x.right
+                T.transplant(z,y)
+                y.right = z.right
+                y.right.parent = y
+            T.transplant(z,y)
+            y.left = z.left
+            y.left.parent = y
+            y.color = z.color
 
-        return x
+        if y_original_color is black:
+            T.delete_fixup(x)
 
+    def delete_fixup(T,x):
+        while x is not T.root and x.color is black:
+            if x is x.parent.left:
+                w = x.parent.right
+                if w.color is red:
+                    w.color = black
+                    x.parent.color = red
+                    T.rotate_left(x.parent)
+                    w = x.parent.right
+                if w.left.color is black and w.right.color is black:
+                    w.color = red
+                    x = x.parent
+                else:
+                    if w.right.color is black:
+                        w.left.color = black
+                        w.color = red
+                        rotate_right(T,w)
+                        w = x.parent.right
+                    w.color = x.parent.color
+                    x.parent.color = black
+                    w.right.color = black
+                    rotate_left(T,x.parent)
+                    x = T.root
+            else:
+                pass
+
+        x.color = black
+
+    # Recursive height implementation.
+    #
     # Return height (ie. the height corresponding to the longest path from the
     # root to (is most distant leaf).
-    def h(T,root=Null):
-        root = T._set_root_null(root)
-        v = 0
-
-        if root is T.sentinel:
-                return 0
-        else:
-            return 1 + max(T.h(root.left),T.h(root.right))
+    #def h(T,root=Null):
+    #    root = T._set_root_null(root)
+    #    v = 0
+    #
+    #    if root is T.sentinel:
+    #            return 0
+    #    else:
+    #        return 1 + max(T.h(root.left),T.h(root.right))
 
     # Black height of Rbt is black height of root node
     # Leaf nodes have black height 0.
@@ -314,6 +374,9 @@ def test(verbose=False):
 
     assert x.search(MIN).key == MIN
     assert x.search(MAX).key == MAX
+
+    assert x.min().key == MIN
+    assert x.max().key == MAX
 
     # assert x.h() <= MAX - MIN + 1
 

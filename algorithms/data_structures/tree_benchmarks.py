@@ -24,58 +24,65 @@ from rbt import Rbt
 MIN_KEY = 1
 MAX_KEY = 5000
 
-def gen_rand_keys():
-    return random.sample(range(MIN_KEY,MAX_KEY + 1)\
-                  , k = MAX_KEY - MIN_KEY + 1)
 
-def test_bst_progressive():
-    t = Bst(MIN_KEY)
+class Test():
+    def __init__(T):
+        T.random_keys = random.sample(range(MIN_KEY,MAX_KEY + 1)\
+                        , k = MAX_KEY - MIN_KEY + 1)
 
-    for k in range(MIN_KEY + 1, MAX_KEY + 1):
-        t.insert(k)
+    def insert_progressive(T):
+        pass
 
-def test_bst_random(random_keys):
-    t = None
-    #print(random_keys)
+    def search(T):
+        pass
 
-    for r in random_keys:
-        if t is None:
-            t = Bst(r)
-        else:
-            t.insert(r)
+    def delete(T):
+        pass
 
-def test_rbt_progressive():
-    t = Rbt()
+    def bst_progressive(T):
+        t = Bst(MIN_KEY)
 
-    for k in range(MIN_KEY, MAX_KEY + 1):
-        t.insert(k)
+        for k in range(MIN_KEY + 1, MAX_KEY + 1):
+            t.insert(k)
 
-def test_rbt_random(random_keys):
-    t = Rbt()
-    #print(random_keys)
-    for k in random_keys:
-        t.insert(k)
+    def bst_random(T):
+        t = None
+
+        for r in T.random_keys:
+            if t is None:
+                t = Bst(r)
+            else:
+                t.insert(r)
+
+    def rbt_progressive(T):
+        t = Rbt()
+
+        for k in range(MIN_KEY, MAX_KEY + 1):
+            t.insert(k)
+
+    def rbt_random(T):
+        t = Rbt()
+        for k in T.random_keys:
+            t.insert(k)
 
 def test(tests):
     test_names = [ ]
-    #test_names.append("bst_progressive")
-    #test_names.append("rbt_progressive")
+    test_names.append("bst_progressive")
+    test_names.append("rbt_progressive")
     test_names.append("bst_random")
     test_names.append("rbt_random")
     benchmarks = dict()
+    setup ='''from __main__ import Test'''
 
-    r = gen_rand_keys()
     for t in test_names:
-        setup ='''from __main__ import test_''' + t
         print ("Test " + t + "...")
-        b = timeit.timeit("test_" + str(t) + "(" + str(gen_rand_keys()) + ")" \
-            , setup=setup, number=tests)
+        b = timeit.timeit("T = Test()" + '\n' + "T." + str(t) + "()", setup=setup, number=tests)
         benchmarks[t]=b
 
     for t in test_names:
         print(t + ": " + str(benchmarks[t]) + " seconds")
 
-    if 'bst_progressive' in benchmarks and 'rbt_progressive' in benchmarks:
+    if 'bst_progressive' in benchmarks and 'rbt_progressive' in benchmarks and MAX_KEY > 1024:
         assert benchmarks['bst_progressive'] >= benchmarks['rbt_progressive']
 
 if __name__ == '__main__':

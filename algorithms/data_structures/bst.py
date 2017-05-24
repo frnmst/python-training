@@ -20,28 +20,28 @@ from stack import Stack
 from queue import Queue
 
 class BstNode:
-    def __init__(T,key,right=None,left=None,parent=None):
-        T.key = key
-        T.right = right
-        T.left = left
-        T.parent = parent
-        T.id = T
+    def __init__(node,key,right=None,left=None,parent=None):
+        node.key = key
+        node.right = right
+        node.left = left
+        node.parent = parent
+        node.id = node
 
-    def _print(T):
+    def _print(node):
         print("Node data")
         print("=========")
-        print("ID = " + str(T.id))
-        print("Key = " + str(T.key))
-        print("Right = " + str(T.right))
-        print("Left = " + str(T.left))
-        print("Parent = " + str(T.parent))
+        print("ID = " + str(node.id))
+        print("Key = " + str(node.key))
+        print("Right = " + str(node.right))
+        print("Left = " + str(node.left))
+        print("Parent = " + str(node.parent))
         print()
 
-    def edit(T,key,right=None,left=None,parent=None):
-        T.key = key
-        T.right = right
-        T.left = left
-        T.parent = parent
+    def edit(node,key,right=None,left=None,parent=None):
+        node.key = key
+        node.right = right
+        node.left = left
+        node.parent = parent
 
 # Using iterative functions we avoid the mess.
 
@@ -58,6 +58,8 @@ class Bst:
     #   id:     pointer to object itT
     def __init__(T,key):
         T.root = BstNode(key)
+        # This value must never change for this class.
+        T.sentinel = None
         T.nodes = 1
         T.id = T
 
@@ -106,7 +108,7 @@ class Bst:
     def search(T,key,root=None):
         x = T._set_root(root)
         found = False
-        while not found and x is not None:
+        while not found and x is not T.sentinel:
             if key == x.key:
                 found = True
             elif key < x.key:
@@ -118,34 +120,34 @@ class Bst:
 
     def min(T,root=None):
         x = T._set_root(root)
-        while x.left is not None:
+        while x.left is not T.sentinel:
             x = x.left
 
         return x
 
     def max(T,root=None):
         x = T._set_root(root)
-        while x.right is not None:
+        while x.right is not T.sentinel:
             x = x.right
 
         return x
 
     def successor(T,root=None):
         x = T._set_root(root)
-        if x.right is not None:
+        if x.right is not T.sentinel:
             return T.min(x.right)
         y = x.parent
-        while y is not None and x is y.right:
+        while y is not T.sentinel and x is y.right:
             x = y
             y = y.parent
         return y
 
     def predecessor(T,root=None):
         x = T._set_root(root)
-        if x.left is not None:
+        if x.left is not T.sentinel:
             return T.max(x.left)
         y = x.parent
-        while y is not None and x is y.left:
+        while y is not T.sentinel and x is y.left:
             x = y
             y = y.parent
         return y
@@ -157,9 +159,9 @@ class Bst:
         while s:
             x = s.pop()
             x._print()
-            if x.right is not None:
+            if x.right is not T.sentinel:
                 s.push(x.right)
-            if x.left is not None:
+            if x.left is not T.sentinel:
                 s.push(x.left)
 
     # An alternative inorder version that iterates over the tree the same way 
@@ -176,22 +178,24 @@ class Bst:
 
     # Move v (and its descendants) in u's position
     # This can also be used for trivial operations
-    def transplant(T,u,v,root=None):
+    def transplant(T,u,v):
         assert u is not None
-        x = T._set_root(root)
 
         if u.parent is None:
             T.root = v
         elif u is u.parent.left:
             u.parent.left = v
-        else: # u is u.parent.right
+        else:
+            assert u is u.parent.right
             u.parent.right = v
 
         if v is not None:
             v.parent = u.parent
 
     # Runs in O(h)
-    def delete(T,z):
+    def delete(T,key):
+        z = T.search(key)
+
         if z.left is None:
             T.transplant(z,z.right)
         elif z.right is None:
@@ -234,7 +238,7 @@ class Bst:
         found = False
 
         # Safety first.
-        if x is None:
+        if x is T.sentinel:
             return 0
 
         while not found:
@@ -248,9 +252,9 @@ class Bst:
             while nodes > 0 and not found:
                 n = q.dequeue()
                 assert n is not None
-                if n.left is not None:
+                if n.left is not T.sentinel:
                     q.enqueue(n.left)
-                if n.right is not None:
+                if n.right is not T.sentinel:
                     q.enqueue(n.right)
                 nodes -= 1
 
@@ -292,7 +296,7 @@ def test(verbose=False):
     for v in test_values:
         if verbose:
             print(v)
-        t.delete(t.search(v))
+        t.delete(v)
 
     if verbose:
         t._print()

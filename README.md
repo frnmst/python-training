@@ -1,6 +1,13 @@
 # python-training
 
-My solutions to several Python exercises found on the web and on some books.
+My solutions to several Python exercises found on the web and on some books,
+as well as experiments with databases, GUIs, etc..
+
+## ...
+
+- Algorithms
+- practicepython
+- backend-dev-exercises
 
 ## Warning
 
