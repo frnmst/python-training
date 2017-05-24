@@ -27,11 +27,6 @@ From the Cormen et alia book
   `T.sentinel`. This enables us to import the code directly and to use it as 
   part of the `Rbt` class methods.
 
-# Run n tests and check that the n lists returned are all equal to each other
-# knowing that they have been generated randomly, they have the same size
-# and the same unique keys. This means that the MAX - MIN + 1 numbers generated
-# above are instered in the data structure randomly.
-
 ## License
 
 python-training/algorithms (c) 2017 by Franco Masotti 
