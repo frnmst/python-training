@@ -189,7 +189,7 @@ class Rbt(Bst):
         elif u is u.parent.left:
             u.parent.left = v
         else:
-            assert u is u.parent.right
+            # assert u is u.parent.right
             u.parent.right = v
         # u.parent might be T.sentinel here. This is not a problem unlike
         # in the traditional BST with Nil values instead of the sentinel.
@@ -207,7 +207,7 @@ class Rbt(Bst):
             T.Transplant(z,z.left)
         else:
             assert type(z.right) is RbtNode and type(z.left) is RbtNode
-            y = T.min(z.right)
+            y = T.successor(z)
             y_original_color = y.color
             x = y.right
             if y.parent is z:
@@ -222,6 +222,7 @@ class Rbt(Bst):
             y.color = z.color
 
         if y_original_color is black:
+            #assert not T.bh(T.root,compare=True)
             T.delete_fixup(x)
 
     def delete_fixup(T,x):
@@ -377,6 +378,10 @@ def test(verbose=False):
 
     assert x.min().key == MIN
     assert x.max().key == MAX
+
+    x.delete(MAX-20)
+
+    assert x.is_rbt()
 
     # assert x.h() <= MAX - MIN + 1
 
