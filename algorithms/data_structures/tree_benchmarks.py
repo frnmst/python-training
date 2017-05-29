@@ -22,48 +22,60 @@ from bst import Bst
 from rbt import Rbt
 
 MIN_KEY = 1
-MAX_KEY = 5000
-
+MAX_KEY = 500
+TESTS = 5
 
 class Test():
     def __init__(T):
         T.random_keys = random.sample(range(MIN_KEY,MAX_KEY + 1)\
                         , k = MAX_KEY - MIN_KEY + 1)
+        T.progressive_keys = range(MIN_KEY, MAX_KEY + 1)
 
-    def insert_progressive(T):
-        pass
+    # In theory if you search all the same keys in different orders, the time
+    # sum of those searches is equal in all cases.
+    def search(T,t):
+        for k in T.random_keys:
+            t.search(k)
 
-    def search(T):
-        pass
-
-    def delete(T):
-        pass
+    # Deletion is not like search, since elements from the tree get removed in 
+    # different ways.
 
     def bst_progressive(T):
-        t = Bst(MIN_KEY)
+        t = None
 
-        for k in range(MIN_KEY + 1, MAX_KEY + 1):
-            t.insert(k)
+        for k in T.progressive_keys:
+            if t is None:
+                t = Bst(k)
+            else:
+               t.insert(k)
+
+        T.search(t)
 
     def bst_random(T):
         t = None
 
-        for r in T.random_keys:
+        for k in T.random_keys:
             if t is None:
-                t = Bst(r)
+                t = Bst(k)
             else:
-                t.insert(r)
+                t.insert(k)
+
+        T.search(t)
 
     def rbt_progressive(T):
         t = Rbt()
 
-        for k in range(MIN_KEY, MAX_KEY + 1):
+        for k in T.progressive_keys:
             t.insert(k)
+
+        T.search(t)
 
     def rbt_random(T):
         t = Rbt()
         for k in T.random_keys:
             t.insert(k)
+
+        T.search(t)
 
 def test(tests):
     test_names = [ ]
@@ -86,7 +98,5 @@ def test(tests):
         assert benchmarks['bst_progressive'] >= benchmarks['rbt_progressive']
 
 if __name__ == '__main__':
-    TESTS = 20
-
     test(TESTS)
     print("All tests passed")

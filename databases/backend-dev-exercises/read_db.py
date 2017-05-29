@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# ......py
+# read_db.py
 #
 # Copyright (c) 2017 Franco Masotti
 #
@@ -9,20 +9,26 @@
 #
 
 import sqlite3
+import csv
+
 conn = sqlite3.connect('exercise01.sqlite')
 
 class DataBase():
 
-    def print_result(self,cursor):
-        for row in cursor.fetchall():
+    def print_result(self,rows):
+        for row in rows:
             print (row)
 
+    # Print the name of the tables in the database.
     def get_structure(self):
         c = conn.cursor()
         c.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        self.print_result(c)
+        rows = c.fetchall()
         c.close()
 
+        return rows
+
+    # Get the database so that it can be exported to a CSV file.
     def denormalize(self):
 
         fields="records.id,records.age,workclasses.name,education_levels.name,\
@@ -42,13 +48,19 @@ class DataBase():
 
         print(query)
         c.execute(query)
-        self.print_result(c)
+
+        rows = c.fetchall()
 
         conn.close()
 
+        return rows
+
+    def export_to_csv(self):
+        pass
+
 if __name__ == '__main__':
     d = DataBase()
-    d.get_structure()
-    d.denormalize()
-
+    d.print_result(d.get_structure())
+    d.print_result(d.denormalize())
+    d.export_to_csv()
 

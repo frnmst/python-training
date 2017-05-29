@@ -12,7 +12,9 @@ From the Cormen et alia book
 - BstSameKeys 
 - BstSort
 - Rbt
-- Tree
+- Test
+
+- HeapSort
 
 #### Explanation
 
@@ -26,6 +28,9 @@ From the Cormen et alia book
   methods, I changed the value of the terminating condition from `None` to 
   `T.sentinel`. This enables us to import the code directly and to use it as 
   part of the `Rbt` class methods.
+
+- The `Test` class compares the BST and RBT implementations under certain 
+  conditions.
 
 ## License
 
