@@ -2,23 +2,63 @@
 
 From the Cormen et alia book
 
-## Classes
+## Class diagrams
 
-### Data stuctures
+```
 
-- Stack
-- Queue
-- Bst
-- BstSameKeys 
-- BstSort
-- Rbt
-- Test
+           +------+
+           | list |
+           +------+
+              ^
+              |
+     _________|_________
+    |                   |
+    |                   |
++-------+           +-------+
+| Queue |           | Stack |
++-------+           +-------+
+    ^                   ^      
+    |                   |
+    |                   |
+    |___________________|
+               ^
+               |
+               |
+             +-----+
+             | Bst |
+             +-----+
+                ^
+                |
+    ____________|________________
+   |                  |          |
+   |                  |          |
+   |                  |          |
++-------------+  +---------+  +-----+
+| BstSameKeys |  | BstSort |  | Rbt |
++-------------+  +---------+  +-----+
 
-- HeapSort
+
+~°~°~°~°
+
+
+  +----------+
+  | HeapSort |
+  +----------+
+
+
+~°~°~°~°
+
+
+  +------------------+
+  | DisjointSetList |
+  +------------------+
+
+
+```
 
 #### Explanation
 
-- `Stack` and `Queue` classes are very basic as they use python's `List` class
+- `Stack` and `Queue` classes are very basic as they use python's `list` class
    with very few modifications.
 
 - To avoid recursion in some methods, the `Bst` class imports the previous 
@@ -29,8 +69,15 @@ From the Cormen et alia book
   `T.sentinel`. This enables us to import the code directly and to use it as 
   part of the `Rbt` class methods.
 
-- The `Test` class compares the BST and RBT implementations under certain 
+- The `TestTree` class compares the BST and RBT implementations under certain 
   conditions.
+
+- The `HeapSort` class is a very simple implementation of both min and max 
+  heaps with the sorting algorithm. The underlying data structure 
+  corresponding to the array is the Python `list` class.
+
+- The `DisjointSetList` is the most basic and worst performing
+  implementation of disjoint sets.
 
 ## License
 

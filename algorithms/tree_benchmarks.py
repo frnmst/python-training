@@ -25,7 +25,7 @@ MIN_KEY = 1
 MAX_KEY = 500
 TESTS = 5
 
-class Test():
+class TreeTest():
     def __init__(T):
         T.random_keys = random.sample(range(MIN_KEY,MAX_KEY + 1)\
                         , k = MAX_KEY - MIN_KEY + 1)
@@ -84,11 +84,11 @@ def test(tests):
     test_names.append("bst_random")
     test_names.append("rbt_random")
     benchmarks = dict()
-    setup ='''from __main__ import Test'''
+    setup ='''from __main__ import TreeTest'''
 
     for t in test_names:
         print ("Test " + t + "...")
-        b = timeit.timeit("T = Test()" + '\n' + "T." + str(t) + "()", setup=setup, number=tests)
+        b = timeit.timeit("T = TreeTest()" + '\n' + "T." + str(t) + "()", setup=setup, number=tests)
         benchmarks[t]=b
 
     for t in test_names:

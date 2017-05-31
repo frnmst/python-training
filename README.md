@@ -5,16 +5,10 @@ as well as experiments with databases, GUIs, etc..
 
 ## Subjects
 
-- Algorithms
-  - data structures
-  - misc
-
-
-- Practice python
-
-
-- Databases
-  - Backend development exercises
+- Python practicing in general
+- Implementation of some algorithms
+- Databases (backend)
+- GUI (frontend)
 
 ## Warning
 
