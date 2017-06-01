@@ -87,12 +87,12 @@ From the Cormen et alia book
   the `len` attribute to the set. The set with the smallest length 
   gets appended to the largest one. This saves us a lot of iterations
   through the list thus enables to have a more efficient implementation. 
-  ~Sidenote:
+  *Sidenote:
   both these implementations have a huge problem which has been solved by 
   returning the sets: In the `DisjointSetListWeighted` we need
   to return the largest set, because it wouldn't work by just reassigning the 
   pointer of the smallest set to the pointer of the bigger one. This is caused 
-  by the fact that the scope is local.~
+  by the fact that the scope is local.*
 
 
 ```
