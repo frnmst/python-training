@@ -49,9 +49,15 @@ From the Cormen et alia book
 ~°~°~°~°
 
 
-  +------------------+
-  | DisjointSetList |
-  +------------------+
+   +-----------------+
+   | DisjointSetList |
+   +-----------------+
+            ^
+            |
+            |
++-------------------------+
+| DisjointSetListWeighted |
++-------------------------+
 
 
 ```
@@ -77,7 +83,57 @@ From the Cormen et alia book
   corresponding to the array is the Python `list` class.
 
 - The `DisjointSetList` is the most basic and worst performing
-  implementation of disjoint sets.
+  implementation of disjoint sets. The `DisjointSetListWeighted` adds 
+  the `len` attribute to the set. The set with the smallest length 
+  gets appended to the largest one. This saves us a lot of iterations
+  through the list thus enables to have a more efficient implementation. 
+  ~Sidenote:
+  both these implementations have a huge problem which has been solved by 
+  returning the sets: In the `DisjointSetListWeighted` we need
+  to return the largest set, because it wouldn't work by just reassigning the 
+  pointer of the smallest set to the pointer of the bigger one. This is caused 
+  by the fact that the scope is local.~
+
+
+```
+
+The text of this exercise was adapted from: "Introduction to algorithms, Third 
+edition", 21.2-5
+
+"Is it possible to modify the DisjointSetListWeighted class in order to
+have only the len and tail attributes in the set object and having the same 
+number of attributes for the list object?"
+
+Set attributes:
+    tail        # pointer to the representative list object
+
+List attributes:
+    prev        # pointer to previous element
+    set         # pointer to the set object
+
+
+FindSet(S):
+    return S.tail
+
+Union(S1,S2):
+    if S2.len < S1.len:
+        tail = S2.tail
+        head = S2.tail
+        while head.prev is not S2:
+            head.set = S1
+            head = head.prev
+
+        # Assert head is the first element of S2
+        head.prev = S1.tail
+
+        S1.tail = tail
+
+    else:
+        assert S2.len >= S1.len
+        <same as then but change S1 to S2 and vice-versa>
+        
+```
+
 
 ## License
 

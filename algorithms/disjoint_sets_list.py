@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# disjoint_sets_list.py.py
+# disjoint_sets_list.py
 #
 # python-training/algorithms (c) 2017 by Franco Masotti
 #                            <franco.masotti@student.unife.it>
