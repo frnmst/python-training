@@ -60,6 +60,14 @@ From the Cormen et alia book
 +-------------------------+
 
 
+~°~°~°~°
+
+
++-----------------+
+| DisjointSetTree |
++-----------------+
+
+
 ```
 
 #### Explanation
@@ -75,8 +83,8 @@ From the Cormen et alia book
   `T.sentinel`. This enables us to import the code directly and to use it as 
   part of the `Rbt` class methods.
 
-- The `TestTree` class compares the BST and RBT implementations under certain 
-  conditions.
+- The `TestTree` class compares the BST and RBT implementations under 
+  two different conditions.
 
 - The `HeapSort` class is a very simple implementation of both min and max 
   heaps with the sorting algorithm. The underlying data structure 
@@ -94,6 +102,11 @@ From the Cormen et alia book
   pointer of the smallest set to the pointer of the bigger one. This is caused 
   by the fact that the scope is local.*
 
+- If you run the `DisjointSetsTest` benchmark class you will be reported of the 
+  running time of the three implementations. There is a HUGE improvement by 
+  appending the shorter list to the longer list, while a smaller improvement in 
+  using the tree implementation with the two heuristics. All the tests have 
+  been done under the same conditions (progressive union operation).
 
 ```
 
