@@ -7,16 +7,16 @@ From the Cormen et alia book
 ```
 
            +------+
-           | list |
-           +------+
-              ^
-              |
-     _________|_________
-    |                   |
-    |                   |
-+-------+           +-------+
-| Queue |           | Stack |
-+-------+           +-------+
+           | list |                           +-------+
+           +------+                           | Graph |
+              ^                               +-------+
+              |                                   ^
+     _________|_________                          |
+    |                   |                         |
+    |                   |                         |
++-------+           +-------+               +----------+
+| Stack |           | Queue |<------------- | BfsGraph |
++-------+           +-------+               +----------+
     ^                   ^      
     |                   |
     |                   |
@@ -107,6 +107,9 @@ From the Cormen et alia book
   appending the shorter list to the longer list, while a smaller improvement in 
   using the tree implementation with the two heuristics. All the tests have 
   been done under the same conditions (progressive union operation).
+
+- The `Graph` class implements a very basic graph structure. Applications are 
+  available in the `BfsGraph` class
 
 ```
 

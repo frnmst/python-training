@@ -38,6 +38,7 @@ class DisjointSetTree():
         print("Node id: " + str(T.id))
         print()
 
+    # Every son of the root now becomes a direct sone of the root itself.
     def find_set(T):
         # While T is not the tree root...
         if T is not T.parent:

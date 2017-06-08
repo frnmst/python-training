@@ -25,6 +25,9 @@ class Queue(list):
     def dequeue(Q):
         return super().pop(0)
 
+    def is_empty(Q):
+        return len(Q) == 0
+
 def test():
     MIN = 2
     MAX = 2000
