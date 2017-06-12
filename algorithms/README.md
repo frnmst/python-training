@@ -10,18 +10,18 @@ From the Cormen et alia book
            | list |                           +-------+
            +------+                           | Graph |
               ^                               +-------+
-              |                                   ^
-     _________|_________                          |
-    |                   |                         |
-    |                   |                         |
-+-------+           +-------+               +----------+
-| Stack |           | Queue |<------------- | BfsGraph |
-+-------+           +-------+               +----------+
-    ^                   ^      
-    |                   |
-    |                   |
-    |___________________|
-               ^
+              |                                   ^     \
+     _________|_________                          |     ^
+    |                   |                         |     |    
+    |                   |                         |     |
++-------+           +-------+               +----------+|
+| Stack |           | Queue |<------------- | BfsGraph ||
++-------+           +-------+               +----------+|
+    ^                   ^                               |
+    |                   |                               /
+    |                   |                   +----------+
+    |___________________|                   | DfsGraph |
+               ^                            +----------+
                |
                |
              +-----+
@@ -102,15 +102,6 @@ From the Cormen et alia book
   pointer of the smallest set to the pointer of the bigger one. This is caused 
   by the fact that the scope is local.*
 
-- If you run the `DisjointSetsTest` benchmark class you will be reported of the 
-  running time of the three implementations. There is a HUGE improvement by 
-  appending the shorter list to the longer list, while a smaller improvement in 
-  using the tree implementation with the two heuristics. All the tests have 
-  been done under the same conditions (progressive union operation).
-
-- The `Graph` class implements a very basic graph structure. Applications are 
-  available in the `BfsGraph` class
-
 ```
 
 The text of this exercise was adapted from: "Introduction to algorithms, Third 
@@ -150,6 +141,21 @@ Union(S1,S2):
         
 ```
 
+- If you run the `DisjointSetsTest` benchmark class you will be reported of the 
+  running time of the three implementations. There is a HUGE improvement by 
+  appending the shorter list to the longer list, while a smaller improvement in 
+  using the tree implementation with the two heuristics. All the tests have 
+  been done under the same conditions (progressive union operation).
+
+- The `Graph` class implements a very basic graph structure. Applications are 
+  available in the `BfsGraph` and `DfsGraph` classes.
+
+- The `BfsGraph` class implements the breadth first class algorithm.
+
+- The `DfsGraph` class implements the depth first class algorithm. Each 
+  iteration in the `for` loop of the `dfs` method corresponds to building a DFS 
+  tree. At the end the DFS forest is built. This means that if a Graph G has n 
+  *isolated* vertices, n trees will be discovered.
 
 ## License
 

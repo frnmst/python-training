@@ -26,7 +26,6 @@ import math
 class Vertex:
     def __init__(V,key):
         V.key = key
-        V.next = None
         V.id = V
 
     def _print(V):
@@ -34,7 +33,6 @@ class Vertex:
         print("=========")
         print("ID = " + str(V.id))
         print("Key = " + str(V.key))
-        print("Next = " + str(V.next))
         print()
 
 class Graph:

@@ -60,7 +60,7 @@ class BfsGraph(Graph):
 
         G.id = G
 
-    def Bfs(G,s):
+    def bfs(G,s):
         for u in G.V:
             if u is not s:
                 u.color = white
@@ -104,7 +104,7 @@ def test():
     assert G.edge_exists('Bologna','Ravenna')
     assert G.edge_exists('Ferrara','Rovigo')
 
-    G.Bfs(G.get_vertex_id_from_key('Ferrara'))
+    G.bfs(G.get_vertex_id_from_key('Ferrara'))
 
     for v in G.V:
         if v is not G.get_vertex_id_from_key('Venexia'):
