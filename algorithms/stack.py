@@ -27,6 +27,9 @@ class Stack(list):
     def pop(S):
         return super().pop()
 
+    def is_empty(S):
+        return len(S) == 0
+
 def test():
     MIN = 2
     MAX = 2000

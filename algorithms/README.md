@@ -22,12 +22,12 @@ From the Cormen et alia book
     |                   |                   +----------+
     |___________________|                   | DfsGraph |
                ^                            +----------+
-               |
-               |
-             +-----+
-             | Bst |
-             +-----+
-                ^
+               |                                  ^
+               |                                  |
+             +-----+                              |
+             | Bst |                    +-------------------+   
+             +-----+                    | DfsIterativeGraph |
+                ^                       +-------------------+
                 |
     ____________|________________
    |                  |          |
@@ -156,6 +156,33 @@ Union(S1,S2):
   iteration in the `for` loop of the `dfs` method corresponds to building a DFS 
   tree. At the end the DFS forest is built. This means that if a Graph G has n 
   *isolated* vertices, n trees will be discovered.
+
+- The `DfsIterativeGraph` implements the DFS algorithm using a stack insteead 
+  of the recursion. The main outer loop enables the algorithm to reach all 
+  vertices, including the isolated ones. The discovery time is registered
+  when a vertex is popped out of the stack, while the parent attribute is 
+  recorded while scanning the adjacency list of the current vertex. The most 
+  complicated part is the correct recording of the finishing times. We have 
+  infact two cases, *based on speculation because they have not been proven*:
+  - Base case: a vertex has been examined (color is gray) and has no adjacent 
+    vertices. In this case we record the finishing time and we set its color to 
+    black. We will call this kind of vertex a "leaf" vertex.
+  - If a vertex has adjacent vertices, we have to wait that all these other 
+    vertices reach the base case. To do this, when a leaf vertex is fully 
+    discovered (color black) we also check that its parent has all adjacent 
+    vertices fully discovered. If that is the case we record the finishing time 
+    of the parent. All this is done recursively by climbing up the DFS tree, 
+    thanks to the parent attribute. This is an alterative way to trace back the
+    discovery if the graph.
+  The first case is achieved by examining the length of the adjacency list of 
+  the vertex. If it's zero we know that there are no adjacent verices. In the 
+  second case the algorithm climbs up the DFS tree untill there are parent 
+  vertices.
+
+  As said previously the recording odf the finishing time in that manner is
+  pure speculation. Although it seems to work using simple examples there is
+  no mathematical demonstration around it.
+
 
 ## License
 

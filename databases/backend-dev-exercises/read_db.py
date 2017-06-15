@@ -12,6 +12,7 @@ import sqlite3
 import csv
 
 conn = sqlite3.connect('exercise01.sqlite')
+conn_2 = sqlite3.connect('exercise01_imported.sqlite')
 
 class DataBase():
 
@@ -51,16 +52,38 @@ class DataBase():
 
         rows = c.fetchall()
 
-        conn.close()
+        c.close()
 
         return rows
 
-    def export_to_csv(self):
-        pass
+    def export_to_csv(self,flattened):
+        # Overwrite existing file.
+        with open('backup.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile, delimiter=',')
+            for row in flattened:
+                writer.writerow(row)
+
+    def import_from_csv(self):
+        with open('backup.csv', 'r', newline='') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',')
+            for row in reader:
+                pass
+
+    def create_flattened(self):
+        c = conn_2.cursor()
+        c.execute('''CREATE TABLE flattened(id integer, age integer, workclasses text, education_levels text, races text, capital_gain integer, capital_loss integer, hours_week integer, countries text, over_50k integer)''')
+        c.close()
 
 if __name__ == '__main__':
     d = DataBase()
     d.print_result(d.get_structure())
-    d.print_result(d.denormalize())
-    d.export_to_csv()
+    flattened = d.denormalize()
+    d.print_result(flattened)
+    d.export_to_csv(flattened)
 
+    e = DataBase()
+    e.create_flattened()
+    # e.import_from_csv()
+
+    conn.close()
+    conn_2.close()
