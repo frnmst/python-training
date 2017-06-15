@@ -18,21 +18,21 @@ From the Cormen et alia book
 | Stack |           | Queue |<------------- | BfsGraph ||
 +-------+           +-------+               +----------+|
     ^                   ^                               |
-    |                   |                               /
-    |                   |                   +----------+
-    |___________________|                   | DfsGraph |
-               ^                            +----------+
-               |                                  ^
-               |                                  |
-             +-----+                              |
-             | Bst |                    +-------------------+   
-             +-----+                    | DfsIterativeGraph |
-                ^                       +-------------------+
-                |
-    ____________|________________
-   |                  |          |
-   |                  |          |
-   |                  |          |
+    |_____________<___  |  ___<__________               |                               
+    |                   |                |   +----------+
+    |___________________|                |   | DfsGraph |
+               ^                         |   +----------+
+               |                         ^         ^
+               |                         |         |_____________________
+             +-----+                     |         |                     |
+             | Bst |                    +-------------------+ +------------------+
+             +-----+                    | DfsIterativeGraph | | DfsEdgeTypeGraph |
+                ^                       +-------------------+ +------------------+
+                |                                                       |
+    ____________|________________                                       |
+   |                  |          |                    +-------------------------+
+   |                  |          |                    | DfsEdgeTypeGraphNoTimes |
+   |                  |          |                    +-------------------------+
 +-------------+  +---------+  +-----+
 | BstSameKeys |  | BstSort |  | Rbt |
 +-------------+  +---------+  +-----+
@@ -183,6 +183,25 @@ Union(S1,S2):
   pure speculation. Although it seems to work using simple examples there is
   no mathematical demonstration around it.
 
+- The `DfsEdgeTypeGraph` classifies all edges of a graph under the following 
+  categories:
+  - Tree edge (*T*): belongs to a BF tree.
+  - Back edge (*B*): given an edge `(u,v)` u is an ancestor of v. This means 
+    that v has been discovered before u.
+  - Forward edge (*F*): given an edge `(u,v)` v is an ancestor of u. This means 
+    that u has been discovered before v.
+  - Cross edge (*C*): An edge wich is none of the previous classifications.
+    These edges can go between vertices of a same BF tree or two different 
+    BF trees.
+  To do the actual classification the parenthesis property theorem, and similar
+  have been used, so the discovery and finish attributes of each vertex have 
+  been used.
+  The `DfsEdgeTypeGraphNoTimes` does the same classification but instead of 
+  using the former attributes for the *B* and *F* type edges, it simply checks 
+  if a vertex is an ancestor of the other. This is done by traversing the BF
+  tree in the right manner using the parent attributes. This version can also 
+  tell if a cross vertex is between two different BF trees or not. *Warning:
+  this algorithm has not been proven to be right (although it seems so)*.
 
 ## License
 
