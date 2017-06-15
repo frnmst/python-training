@@ -196,12 +196,14 @@ Union(S1,S2):
   To do the actual classification the parenthesis property theorem, and similar
   have been used, so the discovery and finish attributes of each vertex have 
   been used.
-  The `DfsEdgeTypeGraphNoTimes` does the same classification but instead of 
-  using the former attributes for the *B* and *F* type edges, it simply checks 
-  if a vertex is an ancestor of the other. This is done by traversing the BF
-  tree in the right manner using the parent attributes. This version can also 
-  tell if a cross vertex is between two different BF trees or not. *Warning:
-  this algorithm has not been proven to be right (although it seems so)*.
+
+- The `DfsEdgeTypeGraphNoTimes` does the same classification of `DfsEdgeTypeGraph`,
+  but instead of using the former attributes for the *B* and *F* type edges, it 
+  simply checks if a vertex is an ancestor of the other. This is done by 
+  traversing the BF tree in the right manner using the parent attributes. This 
+  version can also tell if a cross vertex is between two different BF trees or 
+  not. *Warning: this algorithm has not been proven to be right (although it 
+  seems so)*.
 
 ## License
 
