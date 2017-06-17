@@ -33,11 +33,7 @@ class DfsIterativeGraph(DfsGraph):
         return True
 
     def dfs(G):
-        for u in G.V:
-            u.color = white
-            u.parent = None
-
-        G.time = 0
+        G.prepare()
         s = Stack()
 
         # Reach all vertices including isolated ones.

@@ -61,13 +61,16 @@ class DfsGraph(Graph):
 
         G.id = G
 
-    # Global class variable.
-    time = 0
-    def dfs(G):
+    def prepare(G):
         for u in G.V:
             u.color = white
             u.parent = None
         G.time = 0
+
+    # Global class variable.
+    time = 0
+    def dfs(G):
+        G.prepare()
         # T(n) = O(V + E)
         #
         # O(V) for this loop.

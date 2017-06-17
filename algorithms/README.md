@@ -4,6 +4,15 @@ From the Cormen et alia book
 
 ## Class diagrams
 
+- Lables represents classes
+- The `^` symbol means that the pointing class inherits from the
+  pointed class.
+- Incidental edges means that two or more classes inherit from the
+  same class.
+- Spaces between incidental edges means that is just a crossing
+  for space reasons: the classes involved do not inherit from the same 
+  superclass.
+
 ```
 
            +------+
@@ -18,24 +27,24 @@ From the Cormen et alia book
 | Stack |           | Queue |<------------- | BfsGraph ||
 +-------+           +-------+               +----------+|
     ^                   ^                               |
-    |_____________<___  |  ___<__________               |                               
-    |                   |                |   +----------+
-    |___________________|                |   | DfsGraph |
-               ^                         |   +----------+
-               |                         ^         ^
-               |                         |         |_____________________
-             +-----+                     |         |                     |
-             | Bst |                    +-------------------+ +------------------+
-             +-----+                    | DfsIterativeGraph | | DfsEdgeTypeGraph |
-                ^                       +-------------------+ +------------------+
-                |                                                       |
-    ____________|________________                                       |
-   |                  |          |                    +-------------------------+
-   |                  |          |                    | DfsEdgeTypeGraphNoTimes |
-   |                  |          |                    +-------------------------+
-+-------------+  +---------+  +-----+
-| BstSameKeys |  | BstSort |  | Rbt |
-+-------------+  +---------+  +-----+
+    |_____________<___  |  ___<___________              |                               
+    |                   |                 |   +----------+
+    |___________________|             ____|___| DfsGraph |
+               ^                     |    |   +----------+
+               |                     ^    ^         ^
+               |                     |    |         |_____________________
+             +-----+                 |    |         |                     |
+             | Bst |                 |  +-------------------+ +------------------+
+             +-----+                 |  | DfsIterativeGraph | | DfsEdgeTypeGraph |
+                ^                    |  +-------------------+ +------------------+
+                |                     \                                  ^
+    ____________|________________      \                                 |
+   |                  |          |      \              +-------------------------+
+   |                  |          |       \             | DfsEdgeTypeGraphNoTimes |
+   |                  |          |        \            +-------------------------+
++-------------+  +---------+  +-----+    +----------------------+
+| BstSameKeys |  | BstSort |  | Rbt |    | TopologicalSortGraph |
++-------------+  +---------+  +-----+    +----------------------+
 
 
 ~°~°~°~°
@@ -204,6 +213,14 @@ Union(S1,S2):
   version can also tell if a cross vertex is between two different BF trees or 
   not. *Warning: this algorithm has not been proven to be right (although it 
   seems so)*.
+
+- The `TopologicalSortGraph` class implements the topological sorting algorithm 
+  on top of DFS. To store the sorted vertices, a stack is used instead of a 
+  list, since the vertices need to be added on the head of the list. So a stack 
+  seemed better in this case. The test function runs topological sort on the 
+  graph in figure `22.8` for the exercise `22.4-1` in the Cormen et alia book.
+  The result of this test has been confirmed working correcly on pen and 
+  paper. 
 
 ## License
 
