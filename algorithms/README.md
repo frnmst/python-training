@@ -37,15 +37,17 @@ From the Cormen et alia book
              | Bst |                 |  +-------------------+ +------------------+
              +-----+                 |  | DfsIterativeGraph | | DfsEdgeTypeGraph |
                 ^                    |  +-------------------+ +------------------+
-                |                     \                                  ^
-    ____________|________________      \                                 |
-   |                  |          |      \              +-------------------------+
-   |                  |          |       \             | DfsEdgeTypeGraphNoTimes |
-   |                  |          |        \            +-------------------------+
-+-------------+  +---------+  +-----+    +----------------------+
-| BstSameKeys |  | BstSort |  | Rbt |    | TopologicalSortGraph |
-+-------------+  +---------+  +-----+    +----------------------+
-
+                |                    |\                                  ^
+    ____________|________________    | \                                 |
+   |                  |          |   |  \              +-------------------------+
+   |                  |          |   |   \             | DfsEdgeTypeGraphNoTimes |
+   |                  |          |   |    \            +-------------------------+
++-------------+  +---------+  +-----+|   +----------------------+
+| BstSameKeys |  | BstSort |  | Rbt ||   | TopologicalSortGraph |
++-------------+  +---------+  +-----+|   +----------------------+
+                                     +---------------------+
+                                     | DagSimplePathsGraph |
+                                     +---------------------+
 
 ~°~°~°~°
 
@@ -221,6 +223,13 @@ Union(S1,S2):
   graph in figure `22.8` for the exercise `22.4-1` in the Cormen et alia book.
   The result of this test has been confirmed working correcly on pen and 
   paper. 
+
+- The `DagSimplePathsGraph` class counts the number of simple paths from a 
+  source vertex `s` to a destination vertex `t` in a directed acyclic graph 
+  (dag). Each vertex has an attribute called `path_count` which represent the
+  number of simple paths from that vertex to `t`. All detailed explanations
+  are available at this link:
+  http://courses.cs.tamu.edu/jarvi/2004/f689/assignment3.pdf
 
 ## License
 
