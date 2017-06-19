@@ -23,31 +23,33 @@ From the Cormen et alia book
      _________|_________                          |     ^
     |                   |                         |     |    
     |                   |                         |     |
-+-------+           +-------+               +----------+|
-| Stack |           | Queue |<------------- | BfsGraph ||
-+-------+           +-------+               +----------+|
-    ^                   ^                               |
-    |_____________<___  |  ___<___________              |                               
-    |                   |                 |   +----------+
-    |___________________|             ____|___| DfsGraph |
-               ^                     |    |   +----------+
-               |                     ^    ^         ^
-               |                     |    |         |_____________________
-             +-----+                 |    |         |                     |
-             | Bst |                 |  +-------------------+ +------------------+
-             +-----+                 |  | DfsIterativeGraph | | DfsEdgeTypeGraph |
-                ^                    |  +-------------------+ +------------------+
-                |                    |\                                  ^
-    ____________|________________    | \                                 |
-   |                  |          |   |  \              +-------------------------+
-   |                  |          |   |   \             | DfsEdgeTypeGraphNoTimes |
-   |                  |          |   |    \            +-------------------------+
-+-------------+  +---------+  +-----+|   +----------------------+
-| BstSameKeys |  | BstSort |  | Rbt ||   | TopologicalSortGraph |
-+-------------+  +---------+  +-----+|   +----------------------+
-                                     +---------------------+
-                                     | DagSimplePathsGraph |
-                                     +---------------------+
++-------+           +-------+               +----------+| \
+| Stack |           | Queue |<------------- | BfsGraph ||  \
++-------+           +-------+               +----------+|   \
+    ^                   ^                               |    \
+    |_____________<___  |  ___<___________              |     |                           
+    |                   |                 |   +----------+ +-----------------+
+    |___________________|             ____|___| DfsGraph | | UndirectedGraph |________
+               ^                     |    |   +----------+ +-----------------+        |
+               |                     ^    ^         ^                                 ^
+               |                     |    |         |_____________________            |
+             +-----+                 |    |         |                     |           |
+             | Bst |                 |  +-------------------+ +------------------+    |
+             +-----+                 |  | DfsIterativeGraph | | DfsEdgeTypeGraph |    |
+                ^                    |  +-------------------+ +------------------+    |
+                |                    |\                                  ^            |
+    ____________|________________    | \                                 |            |
+   |                  |          |   |  \              +-------------------------+    |
+   |                  |          |   |   \             | DfsEdgeTypeGraphNoTimes |    |
+   |                  |          |   |    \            +-------------------------+    |
++-------------+  +---------+  +-----+|   +----------------------+                    /
+| BstSameKeys |  | BstSort |  | Rbt ||   | TopologicalSortGraph |                   /
++-------------+  +---------+  +-----+|   +----------------------+                  /
+                                     |____________________________                /
+                                     |                            |              /
+                                     +---------------------+ +--------------------+
+                                     | DagSimplePathsGraph | | DfsUndirectedGraph |
+                                     +---------------------+ +--------------------+
 
 ~°~°~°~°
 
@@ -230,6 +232,28 @@ Union(S1,S2):
   number of simple paths from that vertex to `t`. All detailed explanations
   are available at this link:
   http://courses.cs.tamu.edu/jarvi/2004/f689/assignment3.pdf
+
+- The `UndirectedGraph` implements an undirected graph on top of the directed 
+  graph class. To obtain an undirected edge, we need to have two directed edges
+  `(u,v)` and `(v,u)` which will represent the undirected edge `(u,v)` (or 
+  `(v,u)` which are the same). This means that all atomic operations, like:
+  add edge, exists edge, delete edge, are done for both edges.
+
+- The `DfsUndirectedGraph` implements the DFS algorithm on an undirected graph.
+  The `dfs` method prints a message if at least one cycle is
+  detected, none otherwise. According to various sources, including Wikipedia,
+  to have a running time of O(V) for cycle detection under the former 
+  conditions, if a gray vertex is found during the search it means that
+  a cycle is present. Since at most n - 1 edges can be part of the DF tree
+  (given the previous condition of the gray vertices) it means that the 
+  algorithm takes O(V). We know that an already discovered vertex is not 
+  white. We then need to check that that the adjacent vertex is not connected
+  via the "undirected back edge" (each edge is composed by two direct edges).
+  We do that by checking the parent field of the current vertex (`u.parent is 
+  not v`). We then check the discovery time of both verices to know if v is an 
+  ancestor of u. If that is the case we found a cycle.
+  Due to iomplementation choices the code presented in this class takes more 
+  time than O(V). *This implementation needs anyhow to be verified.*
 
 ## License
 
