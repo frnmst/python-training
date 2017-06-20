@@ -24,7 +24,7 @@ class UndirectedGraph(Graph):
         return super().edge_exists(key_from,key_to) and super().edge_exists(key_to,key_from)
 
     def add_edge(G,key_from,key_to):
-        # Seòf loops are not allowed in an undirected graph.
+        # Self loops are not allowed in an undirected graph.
         if key_from == key_to:
             return False
         else:

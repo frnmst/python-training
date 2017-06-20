@@ -1,6 +1,6 @@
 ## Source
 
-From the Cormen et alia book
+From the CLRS book
 
 ## Class diagrams
 
@@ -45,11 +45,11 @@ From the Cormen et alia book
 +-------------+  +---------+  +-----+|   +----------------------+                    /
 | BstSameKeys |  | BstSort |  | Rbt ||   | TopologicalSortGraph |                   /
 +-------------+  +---------+  +-----+|   +----------------------+                  /
-                                     |____________________________                /
-                                     |                            |              /
-                                     +---------------------+ +--------------------+
-                                     | DagSimplePathsGraph | | DfsUndirectedGraph |
-                                     +---------------------+ +--------------------+
+                         ____________|____________________________                /
+                        |            |                            |              /
+                   +----------+      +---------------------+ +--------------------+
+                   | SccGraph |      | DagSimplePathsGraph | | DfsUndirectedGraph |
+                   +----------+      +---------------------+ +--------------------+
 
 ~°~°~°~°
 
@@ -222,7 +222,7 @@ Union(S1,S2):
   on top of DFS. To store the sorted vertices, a stack is used instead of a 
   list, since the vertices need to be added on the head of the list. So a stack 
   seemed better in this case. The test function runs topological sort on the 
-  graph in figure `22.8` for the exercise `22.4-1` in the Cormen et alia book.
+  graph in figure `22.8` for the exercise `22.4-1` in the CLRS book.
   The result of this test has been confirmed working correcly on pen and 
   paper. 
 
@@ -254,6 +254,21 @@ Union(S1,S2):
   ancestor of u. If that is the case we found a cycle.
   Due to iomplementation choices the code presented in this class takes more 
   time than O(V). *This implementation needs anyhow to be verified.*
+
+- The `SccGraph` class implements an algorithm to copute the strongly connected 
+  components of a graph. This algorithm runs DFS twice, first on the input graph, then on
+  its transposed. In the second case, vertices in the main `for` loop are 
+  examined according to the finishing time attribute of each vertex. Once this 
+  second run has completed, each resulting DF tree corresponds to a SCC 
+  (Strongly Connected Component). This algorithm is similar to the 
+  Kosaraju algorithm. To print each tree we examine each vertex and we access 
+  its parent attribute until we find the *parent* (the vertex who's parent 
+  attribute is NIL). We place the vertex in a list which is part of a set of 
+  lists. Each list represents a SCC. Vertices belonging to the *parent*
+  vertex are placed in the same list. Finally we remove all empty lists,
+  and we obtain all SCCs of the input graph. *Although this implementation 
+  has given the same results on paper, for the example on the CLRS, it needs 
+  anyhow to be verified.*
 
 ## License
 
