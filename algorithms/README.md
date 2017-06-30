@@ -1,8 +1,17 @@
 ## Source
 
-From the Cormen et alia book
+From the CLRS book
 
 ## Class diagrams
+
+- Lables represents classes
+- The `^` symbol means that the pointing class inherits from the
+  pointed class.
+- Incidental edges means that two or more classes inherit from the
+  same class.
+- Spaces between incidental edges means that is just a crossing
+  for space reasons: the classes involved do not inherit from the same 
+  superclass.
 
 ```
 
@@ -14,29 +23,33 @@ From the Cormen et alia book
      _________|_________                          |     ^
     |                   |                         |     |    
     |                   |                         |     |
-+-------+           +-------+               +----------+|
-| Stack |           | Queue |<------------- | BfsGraph ||
-+-------+           +-------+               +----------+|
-    ^                   ^                               |
-    |                   |                               /
-    |                   |                   +----------+
-    |___________________|                   | DfsGraph |
-               ^                            +----------+
-               |
-               |
-             +-----+
-             | Bst |
-             +-----+
-                ^
-                |
-    ____________|________________
-   |                  |          |
-   |                  |          |
-   |                  |          |
-+-------------+  +---------+  +-----+
-| BstSameKeys |  | BstSort |  | Rbt |
-+-------------+  +---------+  +-----+
-
++-------+           +-------+               +----------+| \
+| Stack |           | Queue |<------------- | BfsGraph ||  \
++-------+           +-------+               +----------+|   \
+    ^                   ^                               |    \
+    |_____________<___  |  ___<___________              |     |                           
+    |                   |                 |   +----------+ +-----------------+
+    |___________________|             ____|___| DfsGraph | | UndirectedGraph |________
+               ^                     |    |   +----------+ +-----------------+        |
+               |                     ^    ^         ^                                 ^
+               |                     |    |         |_____________________            |
+             +-----+                 |    |         |                     |           |
+             | Bst |                 |  +-------------------+ +------------------+    |
+             +-----+                 |  | DfsIterativeGraph | | DfsEdgeTypeGraph |    |
+                ^                    |  +-------------------+ +------------------+    |
+                |                    |\                                  ^            |
+    ____________|________________    | \                                 |            |
+   |                  |          |   |  \              +-------------------------+    |
+   |                  |          |   |   \             | DfsEdgeTypeGraphNoTimes |    |
+   |                  |          |   |    \            +-------------------------+    |
++-------------+  +---------+  +-----+|   +----------------------+                    /
+| BstSameKeys |  | BstSort |  | Rbt ||   | TopologicalSortGraph |                   /
++-------------+  +---------+  +-----+|   +----------------------+                  /
+                         ____________|____________________________                /
+                        |            |                            |              /
+                   +----------+      +---------------------+ +--------------------+
+                   | SccGraph |      | DagSimplePathsGraph | | DfsUndirectedGraph |
+                   +----------+      +---------------------+ +--------------------+
 
 ~°~°~°~°
 
@@ -156,6 +169,106 @@ Union(S1,S2):
   iteration in the `for` loop of the `dfs` method corresponds to building a DFS 
   tree. At the end the DFS forest is built. This means that if a Graph G has n 
   *isolated* vertices, n trees will be discovered.
+
+- The `DfsIterativeGraph` implements the DFS algorithm using a stack insteead 
+  of the recursion. The main outer loop enables the algorithm to reach all 
+  vertices, including the isolated ones. The discovery time is registered
+  when a vertex is popped out of the stack, while the parent attribute is 
+  recorded while scanning the adjacency list of the current vertex. The most 
+  complicated part is the correct recording of the finishing times. We have 
+  infact two cases, *based on speculation because they have not been proven*:
+  - Base case: a vertex has been examined (color is gray) and has no adjacent 
+    vertices. In this case we record the finishing time and we set its color to 
+    black. We will call this kind of vertex a "leaf" vertex.
+  - If a vertex has adjacent vertices, we have to wait that all these other 
+    vertices reach the base case. To do this, when a leaf vertex is fully 
+    discovered (color black) we also check that its parent has all adjacent 
+    vertices fully discovered. If that is the case we record the finishing time 
+    of the parent. All this is done recursively by climbing up the DFS tree, 
+    thanks to the parent attribute. This is an alterative way to trace back the
+    discovery if the graph.
+  The first case is achieved by examining the length of the adjacency list of 
+  the vertex. If it's zero we know that there are no adjacent verices. In the 
+  second case the algorithm climbs up the DFS tree untill there are parent 
+  vertices.
+
+  As said previously the recording odf the finishing time in that manner is
+  pure speculation. Although it seems to work using simple examples there is
+  no mathematical demonstration around it.
+
+- The `DfsEdgeTypeGraph` classifies all edges of a graph under the following 
+  categories:
+  - Tree edge (*T*): belongs to a BF tree.
+  - Back edge (*B*): given an edge `(u,v)` u is an ancestor of v. This means 
+    that v has been discovered before u.
+  - Forward edge (*F*): given an edge `(u,v)` v is an ancestor of u. This means 
+    that u has been discovered before v.
+  - Cross edge (*C*): An edge wich is none of the previous classifications.
+    These edges can go between vertices of a same BF tree or two different 
+    BF trees.
+  To do the actual classification the parenthesis property theorem, and similar
+  have been used, so the discovery and finish attributes of each vertex have 
+  been used.
+
+- The `DfsEdgeTypeGraphNoTimes` does the same classification of `DfsEdgeTypeGraph`,
+  but instead of using the former attributes for the *B* and *F* type edges, it 
+  simply checks if a vertex is an ancestor of the other. This is done by 
+  traversing the BF tree in the right manner using the parent attributes. This 
+  version can also tell if a cross vertex is between two different BF trees or 
+  not. *Warning: this algorithm has not been proven to be right (although it 
+  seems so)*.
+
+- The `TopologicalSortGraph` class implements the topological sorting algorithm 
+  on top of DFS. To store the sorted vertices, a stack is used instead of a 
+  list, since the vertices need to be added on the head of the list. So a stack 
+  seemed better in this case. The test function runs topological sort on the 
+  graph in figure `22.8` for the exercise `22.4-1` in the CLRS book.
+  The result of this test has been confirmed working correcly on pen and 
+  paper. 
+
+- The `DagSimplePathsGraph` class counts the number of simple paths from a 
+  source vertex `s` to a destination vertex `t` in a directed acyclic graph 
+  (dag). Each vertex has an attribute called `path_count` which represent the
+  number of simple paths from that vertex to `t`. All detailed explanations
+  are available at this link:
+  http://courses.cs.tamu.edu/jarvi/2004/f689/assignment3.pdf
+
+- The `UndirectedGraph` implements an undirected graph on top of the directed 
+  graph class. To obtain an undirected edge, we need to have two directed edges
+  `(u,v)` and `(v,u)` which will represent the undirected edge `(u,v)` (or 
+  `(v,u)` which are the same). This means that all atomic operations, like:
+  add edge, exists edge, delete edge, are done for both edges.
+
+- The `DfsUndirectedGraph` implements the DFS algorithm on an undirected graph.
+  The `dfs` method prints a message if at least one cycle is
+  detected, none otherwise. According to various sources, including Wikipedia,
+  to have a running time of O(V) for cycle detection under the former 
+  conditions, if a gray vertex is found during the search it means that
+  a cycle is present. Since at most n - 1 edges can be part of the DF tree
+  (given the previous condition of the gray vertices) it means that the 
+  algorithm takes O(V). We know that an already discovered vertex is not 
+  white. We then need to check that that the adjacent vertex is not connected
+  via the "undirected back edge" (each edge is composed by two direct edges).
+  We do that by checking the parent field of the current vertex (`u.parent is 
+  not v`). We then check the discovery time of both verices to know if v is an 
+  ancestor of u. If that is the case we found a cycle.
+  Due to iomplementation choices the code presented in this class takes more 
+  time than O(V). *This implementation needs anyhow to be verified.*
+
+- The `SccGraph` class implements an algorithm to copute the strongly connected 
+  components of a graph. This algorithm runs DFS twice, first on the input graph, then on
+  its transposed. In the second case, vertices in the main `for` loop are 
+  examined according to the finishing time attribute of each vertex. Once this 
+  second run has completed, each resulting DF tree corresponds to a SCC 
+  (Strongly Connected Component). This algorithm is similar to the 
+  Kosaraju algorithm. To print each tree we examine each vertex and we access 
+  its parent attribute until we find the *parent* (the vertex who's parent 
+  attribute is NIL). We place the vertex in a list which is part of a set of 
+  lists. Each list represents a SCC. Vertices belonging to the *parent*
+  vertex are placed in the same list. Finally we remove all empty lists,
+  and we obtain all SCCs of the input graph. *Although this implementation 
+  has given the same results on paper, for the example on the CLRS, it needs 
+  anyhow to be verified.*
 
 ## License
 

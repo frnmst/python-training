@@ -60,7 +60,7 @@ class BfsGraph(Graph):
 
         G.id = G
 
-    def bfs(G,s):
+    def prepare(G,s):
         for u in G.V:
             if u is not s:
                 u.color = white
@@ -69,6 +69,9 @@ class BfsGraph(Graph):
         s.color = gray
         s.distance = 0
         s.parent = None
+
+    def bfs(G,s):
+        G.prepare(s)
         Q = Queue()
         Q.enqueue(s)
         while not Q.is_empty():
@@ -81,7 +84,7 @@ class BfsGraph(Graph):
                     Q.enqueue(v)
             u.color = black
 
-    # Print from s to v thatnks to recursion.
+    # Print from s to v thanks to recursion.
     def _print_path(G,s,v):
         if v is s:
             s._print()

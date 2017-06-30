@@ -22,7 +22,7 @@ import math
 # We also use keys directly instead of the Vertex objects directly since the 
 # user will interact with keys rather than
 #
-# Indirected graphs are a subclass of directed graphs.
+# Undirected graphs are a subclass of directed graphs.
 class Vertex:
     def __init__(V,key):
         V.key = key
@@ -97,8 +97,10 @@ class Graph:
 
         return vertex_list
 
-    def edge_exists(G,key_from,key_to):
-
+    # Define this method as private so that the add_edge
+    # and remove_edge methods of this class are not in conflict
+    # if called by a subclass.
+    def __edge_exists(G,key_from,key_to):
         assert key_from in G.Adj
         assert key_to in G.Adj
 
@@ -108,19 +110,23 @@ class Graph:
 
         return False
 
+    def edge_exists(G,key_from,key_to):
+        return G._Graph__edge_exists(key_from,key_to)
+
     def add_edge(G,key_from,key_to):
-        if not G.edge_exists(key_from,key_to):
+        if not G._Graph__edge_exists(key_from,key_to):
             G.Adj[key_from].append(key_to)
             return True
         else:
             return False
 
     def remove_edge(G,key_from,key_to):
-        if G.edge_exists(key_from,key_to):
+        if G._Graph__edge_exists(key_from,key_to):
             for k in G.Adj[key_from]:
                 if k == key_to:
                     G.Adj[key_from].remove(k)
-            return True
+                    return True
+            return False
         else:
             return False
 
