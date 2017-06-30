@@ -1,0 +1,106 @@
+# poc.kv
+#
+# Copyright (c) 2017 Franco Masotti <franco.masotti@student.unife.it>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+#
+
+#<EngagedLabel>:
+#    Label:
+#        text: "Engaged"
+
+<SlidersWidget>:
+    # Get name from the python file and change it to a local one.
+    slider_one: s1
+    switch: my_switch
+#    engaged: en
+
+    FloatLayout:
+        size: 400, 200
+
+        Switch:
+            id: my_switch
+            pos_hint: {'center_x':0.1, 'center_y':2.5}            
+            active: False
+            on_active:
+                #self.remove_widget(en)
+                print("<<>>")
+                root.switch_activeness(*args)
+
+        ToggleButton:
+            id: second_slider_toggle
+            pos_hint: {'center_x':1.5, 'center_y':2.5}            
+            size_hint: 0.25, 0.25
+            # Avoid overflow.
+            text_size: 80, None
+            text: 'enable second bar'
+
+        ToggleButton:
+            id: reverse_speed_toggle
+            pos_hint: {'center_x':1.5, 'center_y':2.25}            
+            size_hint: 0.25, 0.25
+            text: 'reverse'
+
+        Slider:
+            # Positioning is in respect to the float layout size
+            # using normalized values [0,1]= [0%, 100%]
+            pos_hint: {'center_x':0.1, 'center_y':1.5}
+            id: s1
+            orientation: 'vertical'
+            height: 500
+            range: -100, 500
+            value: 25
+            # When the value changes, call the callback. This on_ thing exists 
+            # for every property. "root" == "Slider"
+            on_value:
+                # Pass all the signal generated variables as a python tuple. In 
+                # this case it's "value".
+                root.slider_value(*args)
+            #on_value: print(self.value)
+
+        Slider:
+            pos_hint: {'center_x':1.1, 'center_y':1.5}
+            id: my_slider_two
+            orientation: 'vertical'
+            height: 500
+            range: -100, 500
+            value: 25
+
+        ProgressBar:
+            id: my_progress_bar
+            pos_hint: {'center_x':0.1, 'center_y':0.6}
+            width: 500
+            # We handle an event here: calculate the value of the progress bar 
+            # on the fly, using the values of the sliders. Also this only works 
+            # if the switch is turned on. Reverse sign if reverse toggle is 
+            # enabled
+            value: (s1.value + my_slider_two.value if reverse_speed_toggle.state == 'down' else s1.value - my_slider_two.value) if my_switch.active else 0
+            max: 200
+
+        ProgressBar:
+            pos_hint: {'center_x':0.1, 'center_y':0.1}
+            width: 500
+            # Enable only if toggle button is enabled.
+            value: s1.value + my_slider_two.value if my_switch.active and second_slider_toggle.state == 'down' else 0
+            max: 200
+
+#        EngagedLabel:
+#            id: en
+#            center: self.parent.center
+#            size: 0,0
