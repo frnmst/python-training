@@ -50,6 +50,12 @@ From the CLRS book
                    +----------+      +---------------------+ +--------------------+
                    | SccGraph |      | DagSimplePathsGraph | | DfsUndirectedGraph |
                    +----------+      +---------------------+ +--------------------+
+                        |
+                        |
+                        |
+              +--------------------+
+              | SccComponentsGraph |
+              +--------------------+
 
 ~°~°~°~°
 
@@ -269,6 +275,14 @@ Union(S1,S2):
   and we obtain all SCCs of the input graph. *Although this implementation 
   has given the same results on paper, for the example on the CLRS, it needs 
   anyhow to be verified.*
+
+- The `SccComponentsGraph` class adds the feature of creating the Graph of the 
+  strongly connected components (Gscc), instead of only printing them like  
+  in the `SccGraph` class. The vertices of Gscc (Gscc.V) are the SCC. Edges in
+  Gscc are created if they connect different SCCs. This is achieved by looking
+  at the adjacency list of the original graph: if there is an edge `(u,v)` in 
+  G, where `u` belongs to SCC `C` and v to SCC `C'` then the edge `(C,C')` is 
+  added in Gscc.
 
 ## License
 
