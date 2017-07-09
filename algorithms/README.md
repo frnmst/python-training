@@ -121,8 +121,8 @@ From the CLRS book
   pointer of the smallest set to the pointer of the bigger one. This is caused 
   by the fact that the scope is local.*
 
-```
-
+```python
+'''
 The text of this exercise was adapted from: "Introduction to algorithms, Third 
 edition", 21.2-5
 
@@ -136,12 +136,12 @@ Set attributes:
 List attributes:
     prev        # pointer to previous element
     set         # pointer to the set object
+'''
 
-
-FindSet(S):
+def FindSet(S):
     return S.tail
 
-Union(S1,S2):
+def Union(S1,S2):
     if S2.len < S1.len:
         tail = S2.tail
         head = S2.tail
@@ -283,6 +283,60 @@ Union(S1,S2):
   at the adjacency list of the original graph: if there is an edge `(u,v)` in 
   G, where `u` belongs to SCC `C` and v to SCC `C'` then the edge `(C,C')` is 
   added in Gscc.
+
+```python
+'''
+The text of this exercise was adapted from: "Introduction to algorithms, Third
+edition", 23.2-2
+
+"The graph G=(V,E) is represented using an adjacency matrix. Write an
+implementation of Prim's algorithm that runs in O(V^2) time."
+
+G.M is the edge matrix.
+
+Edge weight values are encoded directly in the matrix.
+
+Each vertex has a key attribute representing the priority in the priority
+queue Q. The smaller the value, the sooner the vertex is extracted from Q.
+
+In the adjacency list version w(u,v) is the weight function.
+'''
+
+def edge_exists(G,u_index,v_index):
+    return G.M[u_index][v_index] is not Inf
+
+def mst_prim_matrix(G,r):
+    for u in G.V: # O(V)
+        u.key = Inf
+        u.parent = None
+    r.key = 0
+    Q = Priority_queue(G.V)
+    while not Q.is_empty(): # O(V)
+        u = Q.extract_min()
+        i = v.index
+        for j in range(0,G.M.size): # O(V)
+            if G.edge_exists(i,j):
+                if v.belongs_to_q and G.M[i][j] < v.key:
+                    v.parent = u
+                    v.key = G.M[i][j]
+        
+
+# The adjacency list version
+def mst_prim(G,w,r):
+    for u in G.V: # O(V)
+        u.key = Inf
+        u.parent = None
+    r.key = 0
+    Q = Priority_queue(G.V)
+    while not Q.is_empty(): # O(V)
+        u = Q.extract_min()
+        for v in G.Adj[u]:
+           if v.belongs_to_q and w(u,v) < v.key:
+              v.parent = u
+              v.key = w(u,v)
+
+
+```
 
 ## License
 
