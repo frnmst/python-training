@@ -89,7 +89,7 @@ From the CLRS book
 
 ```
 
-#### Explanation
+## Class descriptions and problems.
 
 - `Stack` and `Queue` classes are very basic as they use python's `list` class
    with very few modifications.
@@ -334,8 +334,63 @@ def mst_prim(G,w,r):
            if v.belongs_to_q and w(u,v) < v.key:
               v.parent = u
               v.key = w(u,v)
+```
 
+```
+Problem: Given a G=(V,E), undirected, with positive real weights, find an MST 
+T of G so that T minimizes the product of the weight of all the edges. Can this 
+be done directly, or by changing the weights of each edge so that they are the 
+logarithms of the original weights? Does this technique works for both MST
+algorithms?
 
+We will use:
+- sum(x0...xn) as the sum of n numbers
+- prod(x0...xn) as the product of n numbers
+- log(x) as the logarithm of some base of the number x.
+- min(xi,xj) as the minmum of a sequence of numbers
+- w(u,v) as the weight function of the edge (u,v)
+- n->m as a numeric interval for the function that follows it
+- WEi as the weight of the edge i
+
+We know that the result of any MST algorithm, such as Kruskal's and Prim's
+must minimize the sum of the weight of m edges, where m is a subset of E:
+min(1->m:sum(w(u,v))
+
+If we use logarithms we get:
+min(1->m:sum(log(w(u,v))
+
+By hypothesis we must obtain:
+min(1->m:prod(w(u,v))
+
+Suppose that:
+min(1->m:prod(w(u,v)) == min(1->m:sum(log(w(u,v))
+which means that both members get to the same MST
+(also because all w(u,v) > 0)
+
+then:
+min(WE0*WE1*...*WEm) == min(log(WE0)+log(WE1)+...+log(WEm))
+
+By the product property of the logarithms:
+log(a*b) = log(a) + log(b), that is an identity:
+min(WE0*WE1*...*WEm) == min(log(WE0*WE1*...*WEm)).
+
+Let's call x=WE0*WE1*...*WEm, then:
+min(x) == min(log(x))
+
+The log function increases if x increases and x > 0.
+
+This means that there is only a shift of log if we consider the
+weights > base_of_the_logarithm. For example if we have
+base_of_the_logarithm == 2:
+
+log(2) = 1
+log(1) = 0
+log(< 1) = < 0
+...
+
+Just to be sure I would take base_of_the_logarithm = min(w(u,v)) - 1.
+
+Under this condition all the previous should work for both MST algorithms.
 ```
 
 ## License
